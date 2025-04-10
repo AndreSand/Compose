@@ -4,13 +4,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.android.example.compose_training.data.Item
+import com.android.example.compose_training.data.ItemsRepository
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 
 /**
  * ViewModel to validate and insert items in the Room database.
  */
-class ItemEntryViewModel : ViewModel() {
+class ItemEntryViewModel(
+    private val itemsRepository: ItemsRepository
+) : ViewModel() {
 
     /**
      * Holds current item ui state
@@ -30,6 +35,17 @@ class ItemEntryViewModel : ViewModel() {
     private fun validateInput(uiState: ItemDetails = itemUiState.itemDetails): Boolean {
         return with(uiState) {
             name.isNotBlank() && price.isNotBlank() && quantity.isNotBlank()
+        }
+    }
+    
+    /**
+     * Inserts an [Item] in the database
+     */
+    fun saveItem() {
+        if (validateInput()) {
+            viewModelScope.launch {
+                itemsRepository.insertItem(itemUiState.itemDetails.toItem())
+            }
         }
     }
 }

@@ -11,8 +11,8 @@ android {
 
     defaultConfig {
         applicationId = "com.android.example.compose_training"
-        minSdk = 33
-        targetSdk = 36
+        minSdk = 31
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -60,4 +60,9 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
+    
+    // Room dependencies
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 }
